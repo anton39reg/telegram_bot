@@ -16,4 +16,7 @@ def handle_text(message):
 
 
 if __name__ == '__main__':
-    bot.polling(none_stop=True, timeout=1)
+    try:
+        bot.polling(none_stop=True, timeout=1)
+    except Exception:
+        pass
