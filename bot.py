@@ -1,6 +1,5 @@
 import telebot
 
-
 bot = telebot.TeleBot('889866095:AAEK8yduZz8nWky-bJW_FkVVuXeAkBL5oNk')
 
 
@@ -17,4 +16,4 @@ def handle_text(message):
 
 
 if __name__ == '__main__':
-    bot.polling(none_stop=True)
+    bot.polling(none_stop=True, timeout=0)
