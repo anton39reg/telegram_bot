@@ -30,9 +30,9 @@ def handle_text(message):
                          """Привет! Напиши /help, чтобы узнать, что я умею""")
     elif message.text == "/help":
         bot.send_message(message.from_user.id,
-                         """Рад видеть, что ты заинтересовался.
-                          Напиши /new_films и я покажу фильмы, которые сейчас показывают в кинотеатрах""")
-    elif message.text == "/new_films":
+                         "Рад видеть, что ты заинтересовался.\n"
+                         "Напиши new_films и я покажу фильмы, которые сейчас показывают в кинотеатрах")
+    elif message.text == "new_films":
         films = show_new_films()
         res = str()
         for elem in films:
@@ -46,6 +46,6 @@ def handle_text(message):
 
 if __name__ == '__main__':
     try:
-        bot.polling(none_stop=True, timeout=1)
+        bot.polling(none_stop=True, timeout=0)
     except Exception:
         pass
