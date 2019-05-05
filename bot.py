@@ -56,7 +56,9 @@ def handle_text(message):
     elif message.text == "/help":
         bot.send_message(message.from_user.id,
                          "Рад видеть, что ты заинтересовался.\n"
-                         "Напиши /new_films и я покажу фильмы, которые сейчас показывают в кинотеатрах")
+                         "Напиши /new_films и я покажу фильмы, которые сейчас показывают в кинотеатрах.\n"
+                         "Напиши /show_film 'yourfilm' и я постараюсь найти информацию о нём."
+                         " Только использую анлийское название фильма")
     elif message.text == "/new_films":
         films = show_new_films()
         res = str()
