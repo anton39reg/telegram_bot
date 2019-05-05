@@ -1,3 +1,2 @@
 pyTelegramBotAPI
-urllib.request
 beautifulsoup4
