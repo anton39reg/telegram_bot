@@ -34,7 +34,7 @@ def find_film(name):
         director = res.find('i', class_='director').find('a').text
         rating = res.find('div', class_='rating ratingGreenBG').text
         info = 'https://www.kinopoisk.ru'+link
-        info += (film + ';\n' + year + ';\nРежиссёр - ' +  director + ';\nРейтинг - ' - rating + ';\n')
+        info += (film + ';\n' + year + ';\nРежиссёр - ' +  director + ';\nРейтинг - ' + rating + ';\n')
         return info
     else:
         info = 'Извини, я ничего не нашёл('
