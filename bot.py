@@ -20,7 +20,32 @@ def show_new_films():
     return res
 
 
+def find_film(name):
+    find = name.replace(' ', '%20')
+    t = 'https://www.kinopoisk.ru/index.php?kp_query='+find+'&what='
+    film = urllib.request.urlopen(t)
+
+    film_soup = BeautifulSoup(film, 'lxml')
+    res = film_soup.find('div', class_='element most_wanted')
+    if res:
+        link = res.find('p', class_='name').find('a').get('data-url')
+        film = res.find('p', class_='name').find('a').text
+        year = res.find('p', class_='name').find('span').text
+        director = res.find('i', class_='director').find('a').text
+        rating = res.find('div', class_='rating ratingGreenBG').text
+        info = 'https://www.kinopoisk.ru'+link
+        info += (film + ';\n' + year + ';\nРежиссёр - ' +  director + ';\nРейтинг - ' - rating + ';\n')
+        return info
+    else:
+        info = 'Извини, я ничего не нашёл('
+        return info
+
+
+
 bot = telebot.TeleBot('889866095:AAEK8yduZz8nWky-bJW_FkVVuXeAkBL5oNk')
+
+
+
 
 
 @bot.message_handler(content_types=["text"])
@@ -31,8 +56,8 @@ def handle_text(message):
     elif message.text == "/help":
         bot.send_message(message.from_user.id,
                          "Рад видеть, что ты заинтересовался.\n"
-                         "Напиши new_films и я покажу фильмы, которые сейчас показывают в кинотеатрах")
-    elif message.text == "new_films":
+                         "Напиши /new_films и я покажу фильмы, которые сейчас показывают в кинотеатрах")
+    elif message.text == "/new_films":
         films = show_new_films()
         res = str()
         for elem in films:
@@ -40,6 +65,12 @@ def handle_text(message):
                     + ';\n' + elem[3])
             res += '\n\n'
         bot.send_message(message.from_user.id, res)
+    elif message.text[:10] == '/show_film':
+        try:
+            res = find_film(message.text[11:])
+            bot.send_message(message.from_user.id, res)
+        except UnicodeEncodeError:
+            bot.send_message(message.from_user.id, 'Используй, пожалуйста, английское название фильма')
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю, напиши /help")
 
