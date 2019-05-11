@@ -41,10 +41,11 @@ def find_film(name):
         return info
 
 
-bot = telebot.TeleBot('889866095:AAEK8yduZz8nWky-bJW_FkVVuXeAkBL5oNk')
+telebot.TeleBot.find_film = find_film
+telebot.TeleBot.show_new_films = show_new_films
 
-bot.find_film = find_film
-bot.show_new_films = show_new_films
+
+bot = telebot.TeleBot('889866095:AAEK8yduZz8nWky-bJW_FkVVuXeAkBL5oNk')
 
 
 @bot.message_handler(content_types=["text"])
