@@ -41,11 +41,10 @@ def find_film(name):
         return info
 
 
-
 bot = telebot.TeleBot('889866095:AAEK8yduZz8nWky-bJW_FkVVuXeAkBL5oNk')
 
-
-
+bot.find_film = find_film
+bot.show_new_films = show_new_films
 
 
 @bot.message_handler(content_types=["text"])
@@ -60,7 +59,7 @@ def handle_text(message):
                          "Напиши /show_film 'yourfilm' и я постараюсь найти информацию о нём."
                          " Только использую анлийское название фильма")
     elif message.text == "/new_films":
-        films = show_new_films()
+        films = bot.show_new_films()
         res = str()
         for elem in films:
             res += (elem[0] + ';\nрежиссёр - ' + elem[1] + ';\nрейтинг - ' + elem[2]
@@ -69,7 +68,7 @@ def handle_text(message):
         bot.send_message(message.from_user.id, res)
     elif message.text[:10] == '/show_film':
         try:
-            res = find_film(message.text[11:])
+            res = bot.find_film(message.text[11:])
             bot.send_message(message.from_user.id, res)
         except UnicodeEncodeError:
             bot.send_message(message.from_user.id, 'Используй, пожалуйста, английское название фильма')
