@@ -3,7 +3,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 
-def show_new_films():
+def show_new_films(self):
     res = []
     page = urllib.request.urlopen('https://www.kinopoisk.ru/afisha/new/city/6126/')
     soup = BeautifulSoup(page, 'lxml')
@@ -20,7 +20,7 @@ def show_new_films():
     return res
 
 
-def find_film(name):
+def find_film(self, name):
     find = name.replace(' ', '%20')
     t = 'https://www.kinopoisk.ru/index.php?kp_query='+find+'&what='
     film = urllib.request.urlopen(t)
