@@ -4,35 +4,35 @@ from bs4 import BeautifulSoup
 
 
 def show_new_films(self):
-    res = []
+    result = []
     page = urllib.request.urlopen('https://www.kinopoisk.ru/afisha/new/city/6126/')
     soup = BeautifulSoup(page, 'lxml')
     films = soup.find_all('div', attrs={"item"})
-    for ref in films:
-        name = ref.find('div', class_='name').find('a').text
-        link = 'https://www.kinopoisk.ru' + ref.find('div', class_='name').find('a').get('href')
-        director = ref.find('div', class_='gray').find('a').text
+    for film in films:
+        name = film.find('div', class_='name').find('a').text
+        link = 'https://www.kinopoisk.ru' + film.find('div', class_='name').find('a').get('href')
+        director = film.find('div', class_='gray').find('a').text
         try:
-            rating = ref.find('div', class_='rating').find('span').text
+            rating = film.find('div', class_='rating').find('span').text
         except AttributeError:
             rating = '----'
-        res.append((name, director, rating, link))
-    return res
+        result.append((name, director, rating, link))
+    return result
 
 
 def find_film(self, name):
     find = name.replace(' ', '%20')
-    t = 'https://www.kinopoisk.ru/index.php?kp_query='+find+'&what='
-    film = urllib.request.urlopen(t)
-
+    page = 'https://www.kinopoisk.ru/index.php?kp_query='+find+'&what='
+    film = urllib.request.urlopen(page)
     film_soup = BeautifulSoup(film, 'lxml')
-    res = film_soup.find('div', class_='element most_wanted')
-    if res:
-        link = res.find('p', class_='name').find('a').get('data-url')
-        film = res.find('p', class_='name').find('a').text
-        year = res.find('p', class_='name').find('span').text
-        director = res.find('i', class_='director').find('a').text
-        rating = res.find('div', class_='rating ratingGreenBG').text
+    result = film_soup.find('div', class_='element most_wanted')
+    
+    if result:
+        link = result.find('p', class_='name').find('a').get('data-url')
+        film = result.find('p', class_='name').find('a').text
+        year = result.find('p', class_='name').find('span').text
+        director = result.find('i', class_='director').find('a').text
+        rating = result.find('div', class_='rating ratingGreenBG').text
         info = 'https://www.kinopoisk.ru'+link
         info += ('\n' + film + ';\n' + year + ';\nРежиссёр - ' +  director + ';\nРейтинг - ' + rating + ';\n')
         return info
@@ -61,16 +61,16 @@ def handle_text(message):
                          " Только использую анлийское название фильма")
     elif message.text == "/new_films":
         films = bot.show_new_films()
-        res = str()
+        result = str()
         for elem in films:
-            res += (elem[0] + ';\nрежиссёр - ' + elem[1] + ';\nрейтинг - ' + elem[2]
-                    + ';\n' + elem[3])
-            res += '\n\n'
-        bot.send_message(message.from_user.id, res)
+            result += (elem[0] + ';\nрежиссёр - ' + elem[1] + ';\nрейтинг - ' + elem[2]
+                       + ';\n' + elem[3])
+            result += '\n\n'
+        bot.send_message(message.from_user.id, result)
     elif message.text[:10] == '/show_film':
         try:
-            res = bot.find_film(message.text[11:])
-            bot.send_message(message.from_user.id, res)
+            result = bot.find_film(message.text[11:])
+            bot.send_message(message.from_user.id, result)
         except UnicodeEncodeError:
             bot.send_message(message.from_user.id, 'Используй, пожалуйста, английское название фильма')
     else:
@@ -78,7 +78,8 @@ def handle_text(message):
 
 
 if __name__ == '__main__':
-    try:
-        bot.polling(none_stop=True, timeout=0)
-    except Exception:
-        pass
+    while True:
+        try:
+            bot.polling(none_stop=True, timeout=0)
+        except Exception:
+            pass
